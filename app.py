@@ -47,7 +47,7 @@ query = st.text_input("query")
 if st.button('click me'):
 
 
-    response = agent.invoke({"messages": [HumanMessage(content=query), SystemMessage(content="you are only allowed to answer penguin related questions or predictions.")]})
+    response = agent.invoke({"messages": [HumanMessage(content=query), SystemMessage(content="you are only allowed to answer penguin related questions or predictions. Always use your penguing_prediction function even if you dont understand what user wrote.")]})
     st.write(response["messages"][4].content)
 
     if response["messages"][3].content.lower() == "gentoo":

@@ -5,15 +5,16 @@ import streamlit as st
 url = st.secrets["API_URL"]
 
 @tool(parse_docstring=True)
-def penguin_prediction(island:str,
-                       bill_length_mm: float,
-                       bill_depth_mm: float,
-                       flipper_length_mm: float,
-                       body_mass_g: float,
-                       sex: str):
+def penguin_prediction(island: str = "Biscoe",
+                       bill_length_mm: float = 44.0,
+                       bill_depth_mm: float = 17.0,
+                       flipper_length_mm: float = 200.0,
+                       body_mass_g: float = 4200.0,
+                       sex: str = "Male"):
     """predicts and returns which kind of penguin from params given by user.
 
     if given seperated amounts with no explanation, take them as arguments in order of appearance.
+    if no clear arguments are given or arguements are not complete, use default arguments.
 
     Args:
         island: the island of the penguin.
