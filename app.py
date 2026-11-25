@@ -1,5 +1,27 @@
 import streamlit as st
 import requests
+from transformers import pipeline
+from langchain.tools import tool
+from langchain.chat_models import init_chat_model
+from langchain.chat_models import init_chat_model
+from langchain.agents import create_agent
+from langchain.tools import tool
+from IPython.display import Markdown
+import streamlit as st
+import requests
+from langchain_core.messages import HumanMessage, SystemMessage
+from utils_model import penguin_prediction
+
+api = st.secrets["OPEN_AI_KEY"]
+url = st.secrets["API_URL"]
+
+
+model = init_chat_model("gpt-4o-mini", model_provider="openai", api_key=api)
+
+tools = [penguin_prediction]
+
+
+
 """
 # Zoologist front
 """
@@ -23,42 +45,25 @@ Either like the title above by just creating a string (or an f-string) starting.
 - body mass (in g)
 - sex ("Male" or "Female")
 """
+agent = create_agent(model=model, tools=tools)
 
-island = st.text_input("island")
-bill_length_mm = st.text_input("bill length")
-bill_depth_mm = st.text_input("bill depth")
-flipper_length_mm = st.text_input("flipper length")
-body_mass_g = st.text_input("body mass")
-sex = st.text_input("sex")
+query = st.text_input("query")
 
-
-"""
-## Once we have these, let's call our API in order to retrieve a prediction
-
-See ? No need to load a `model.joblib` file in this app, we do not even need to know anything about Data Science in order to retrieve a prediction...
-
-🤔 How could we call our API ? Of course... The `requests` package 💡
-
-What are the steps to follow in order to call an API ?
-
-1. Which url will you use? Save it in a variable so you can easily change it later...
-
-2. Let's build a dictionary containing the parameters for our API...
-
-3. Let's call our API using the `requests` package...
-
-4. Let's retrieve the prediction from the **JSON** returned by the API...
-
-## Finally, we can display the prediction to the user
-"""
-url  = st.secrets["API_URL"]
-params = {"island": island, "bill_length_mm": bill_length_mm, "bill_depth_mm": bill_depth_mm, "flipper_length_mm": flipper_length_mm, "body_mass_g": body_mass_g, "sex": sex}
-
-response = requests.get(url, params=params)
-
-response
 
 if st.button('click me'):
-    st.write(response.json())
+
+
+    response = agent.invoke({"messages": [HumanMessage(content=query), SystemMessage(content="you are only allowed to answer penguin related questions or predictions.")]})
+    st.write(response["messages"][4].content)
+
+    if response["messages"][3].content.lower() == "gentoo":
+        st.image("peng_images/gentoo.png")
+
+    elif response["messages"][3].content.lower() == "adelie":
+        st.image("peng_images/adelie.png")
+
+    elif response["messages"][3].content.lower() == "chinstrap":
+        st.image("peng_images/chinstrap.png")
+
 else:
     st.write('I was not clicked 😞')
