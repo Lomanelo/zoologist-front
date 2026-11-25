@@ -1,14 +1,8 @@
 import streamlit as st
-import requests
-from transformers import pipeline
-from langchain.tools import tool
 from langchain.chat_models import init_chat_model
 from langchain.chat_models import init_chat_model
 from langchain.agents import create_agent
-from langchain.tools import tool
-from IPython.display import Markdown
 import streamlit as st
-import requests
 from langchain_core.messages import HumanMessage, SystemMessage
 from utils_model import penguin_prediction
 
