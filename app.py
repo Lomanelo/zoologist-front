@@ -51,7 +51,7 @@ What are the steps to follow in order to call an API ?
 
 ## Finally, we can display the prediction to the user
 """
-url  = st.secrets("API_URL")
+url  = st.secrets["API_URL"]
 params = {"island": island, "bill_length_mm": bill_length_mm, "bill_depth_mm": bill_depth_mm, "flipper_length_mm": flipper_length_mm, "body_mass_g": body_mass_g, "sex": sex}
 
 response = requests.get(url, params=params)
